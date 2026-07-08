@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}
+    Students
+{% endblock %}
+
+{% block body %}
+
+<div>
+    {% for student in students %}
+    <a href="{% url 'record' student.id %}" target="_blank">
+    <div class="student-card">
+        <img src="{{ student.image.url }}" alt="{{ student.name }}">
+        <h1>{{ student.name }}</h1>
+    </div>
+    </a>
+    {% endfor %}
+</div>
+
+
+<div>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit">
+    </form>
+</div>
+
+
+{% endblock %}
