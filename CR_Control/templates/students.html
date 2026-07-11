@@ -5,27 +5,45 @@
     Students
 {% endblock %}
 
-{% block body %}
+{% block nav %}
+  {% include 'nav.html' %}
+{% endblock %}
 
-<div>
+{% block body %}
+<div class="container">
+
+  <div class="page-header">
+    <div>
+      <span class="page-header__eyebrow">Class Roster</span>
+      <h1>Students</h1>
+    </div>
+  </div>
+
+  <div class="student-grid">
     {% for student in students %}
-    <a href="{% url 'record' student.id %}" target="_blank">
-    <div class="student-card">
+    <a class="student-card-link" href="{% url 'record' student.id %}" target="_blank">
+      <div class="student-card">
         <img src="{{ student.image.url }}" alt="{{ student.name }}">
         <h1>{{ student.name }}</h1>
-    </div>
+      </div>
     </a>
+    {% empty %}
+      <div class="empty" style="grid-column: 1 / -1;">
+        <h3>No students yet</h3>
+        <p>Add your first student using the form below.</p>
+      </div>
     {% endfor %}
-</div>
+  </div>
 
-
-<div>
+  <div class="card form-card">
+    <h2>Add a student</h2>
+    <p class="text-muted form-card__hint">Upload a photo and fill in their details.</p>
     <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Add student">
     </form>
+  </div>
+
 </div>
-
-
 {% endblock %}

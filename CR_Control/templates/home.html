@@ -5,7 +5,152 @@
 {% endblock %}
 
 {% block body %}
+<div class="container">
 
+  <section class="hero">
+    <div>
+      <span class="hero__eyebrow">Built for CRs &amp; professors</span>
+      <h1 class="hero__title">Attendance that <span class="is-accent">actually</span> adds up.</h1>
+      <p class="hero__subtitle">Mark sessions in a tap, watch percentages update live, and catch students falling behind before it's a problem.</p>
+      <div class="hero__cta">
+        <a href="{% url 'login' %}" class="btn btn--primary">Log in</a>
+        <a href="{% url 'create_user' %}" class="btn btn--ghost">Create account</a>
+      </div>
+    </div>
 
+    <div class="hero__wall">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </section>
 
+  <div class="ticker">
+    <div class="ticker__track">
+      <span class="is-lit">MARK</span>
+      <span>·</span>
+      <span>TRACK</span>
+      <span>·</span>
+      <span>REPORT</span>
+      <span>·</span>
+      <span class="is-lit">CS301</span>
+      <span>·</span>
+      <span>CS304</span>
+      <span>·</span>
+      <span>MARK</span>
+      <span>·</span>
+      <span>TRACK</span>
+      <span>·</span>
+      <span>REPORT</span>
+      <span>·</span>
+      <span class="is-lit">CS301</span>
+      <span>·</span>
+      <span>CS304</span>
+      <span>·</span>
+    </div>
+  </div>
+
+  <section class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-card__icon">01</div>
+      <h3>Mark in seconds</h3>
+      <p>Present, absent, or late — one tap per student, per session. No paper registers, no end-of-week math.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card__icon">02</div>
+      <h3>Every student, at a glance</h3>
+      <p>See each student's full attendance history as a simple visual strip, plus their live percentage.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card__icon">03</div>
+      <h3>Monthly logs, automatically</h3>
+      <p>Attendance rolls up into monthly reports on its own — nothing to compile by hand.</p>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <h2>Ready to take attendance the easy way?</h2>
+    <p class="text-muted">Set up your subjects and start marking today's session in under a minute.</p>
+    <a href="{% url 'create_user' %}" class="btn btn--primary">Get started</a>
+  </section>
+
+</div>
 {% endblock %}

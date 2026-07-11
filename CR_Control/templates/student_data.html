@@ -5,30 +5,85 @@
     Record
 {% endblock %}
 
-
 {% block body %}
-   <div>
-    <div class="student-card">
-        <img src="{{ student_data.image.url }}" alt="{{ student_data.name }}">
-        <h1>Name- {{ student_data.name }}</h1>
-        <h1>Regd No- {{ student_data.regd_no }}</h1>
-        <h1>Branch- {{ student_data.branch }}</h1>
-        <h1>Email- {{ student_data.email }}</h1>
-        <h1>Phone No- {{ student_data.phone_no }}</h1>
-        <h1>Attendance- {{ att_data }} %</h1>
-        
-        
+<div class="container">
+
+  <div class="page-header">
+    <div>
+      <span class="page-header__eyebrow">Student Record</span>
+      <h1>{{ student_data.name }}</h1>
     </div>
-<div class="student-card">
-    {% for log in att_log %}
-        <ul>
-            <li>
-                <h1>
-                    Course Code- {{ log.session.subject.code }} <br>Date- {{ log.session.created_at|date }}<br> Status- {{ log.status }}
-                </li>
-            </li>
-        </ul>
-    {% endfor %}
-</div>
+    <a href="{% url 'students' %}" class="btn btn--ghost btn--sm">Back to roster</a>
+  </div>
+
+  <div class="card profile-card">
+    <img src="{{ student_data.image.url }}" alt="{{ student_data.name }}">
+
+    <div class="profile-card__body">
+      <div class="profile-card__name">{{ student_data.name }}</div>
+      <div class="profile-card__regd">{{ student_data.regd_no }}</div>
+
+      <div class="profile-meta">
+        <div class="profile-meta__row">
+          <span class="profile-meta__label">Branch</span>
+          <span class="profile-meta__value">{{ student_data.branch }}</span>
+        </div>
+        <div class="profile-meta__row">
+          <span class="profile-meta__label">Email</span>
+          <span class="profile-meta__value">{{ student_data.email }}</span>
+        </div>
+        <div class="profile-meta__row">
+          <span class="profile-meta__label">Phone</span>
+          <span class="profile-meta__value">{{ student_data.phone_no }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card__attendance">
+      <div class="profile-card__attendance-value {% if att_data < 60 %}is-low{% elif att_data < 75 %}is-mid{% endif %}">{{ att_data }}%</div>
+      <div class="profile-card__attendance-label">Attendance</div>
+    </div>
+  </div>
+
+  <h2>Attendance log</h2>
+
+  <div class="table-wrap">
+    <table class="register">
+      <thead>
+        <tr>
+          <th>Course code</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in att_log %}
+        <tr>
+          <td class="text-mono">{{ log.session.subject.code }}</td>
+          <td>{{ log.session.created_at|date }}</td>
+          <td>
+            {% if log.status == "Present" %}
+              <span class="badge badge--present">{{ log.status }}</span>
+            {% elif log.status == "Absent" %}
+              <span class="badge badge--absent">{{ log.status }}</span>
+            {% else %}
+              <span class="badge badge--late">{{ log.status }}</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3">
+            <div class="empty">
+              <h3>No attendance logged</h3>
+              <p>Sessions will appear here once attendance is marked.</p>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
 </div>
 {% endblock %}

@@ -1,63 +1,1033 @@
-/* Student Card Container */
-body {
-    font-family:sans-serif;
+/* ============================================================
+   STUDENT TRACKER — DESIGN SYSTEM
+   Aesthetic: dark navy, minimal, "attendance register" feel.
+   Signature element: .strip — a row of small squares representing
+   individual session records (like a punch card / commit graph),
+   used anywhere attendance history needs to be shown at a glance.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* --- Color tokens --- */
+  --bg:            #0A0F1C;
+  --bg-elevated:   #0D1425;
+  --panel:         #111A2E;
+  --panel-hover:   #16213A;
+  --border:        #1F2B44;
+  --border-soft:   #182238;
+
+  --text:          #E7ECF5;
+  --text-muted:    #8592AB;
+  --text-faint:    #55617A;
+
+  --accent:        #4C7EFF;
+  --accent-dim:    #2C4A8C;
+  --accent-soft:   rgba(76, 126, 255, 0.12);
+
+  --present:       #34D399;
+  --present-soft:  rgba(52, 211, 153, 0.14);
+  --absent:        #F87171;
+  --absent-soft:   rgba(248, 113, 113, 0.14);
+  --late:          #FBBF24;
+  --late-soft:     rgba(251, 191, 36, 0.14);
+
+  /* --- Type --- */
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  /* --- Layout --- */
+  --radius-sm: 6px;
+  --radius:    10px;
+  --radius-lg: 14px;
+  --nav-h:     64px;
+  --container: 1140px;
+
+  --shadow-card: 0 1px 0 rgba(255,255,255,0.02) inset, 0 8px 24px rgba(0,0,0,0.35);
 }
 
+/* ============================================================
+   RESET
+   ============================================================ */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(76,126,255,0.06), transparent 40%),
+    radial-gradient(circle at 85% 20%, rgba(76,126,255,0.04), transparent 35%);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--text);
+  margin: 0 0 8px 0;
+  letter-spacing: -0.01em;
+}
+h1 { font-size: 28px; font-weight: 700; }
+h2 { font-size: 20px; font-weight: 600; }
+h3 { font-size: 16px; font-weight: 600; }
+p  { color: var(--text-muted); margin: 0 0 12px 0; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: #6f97ff; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ============================================================
+   NAV — reusable, include partials/nav.html inside {% block nav %}
+   ============================================================ */
+.nav {
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-soft);
+  background: rgba(10, 15, 28, 0.85);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.nav__inner {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--text);
+}
+
+.nav__brand-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: linear-gradient(145deg, var(--accent), var(--accent-dim));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav__link {
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.nav__link:hover { color: var(--text); background: var(--panel-hover); }
+.nav__link.is-active { color: var(--text); background: var(--panel); }
+
+.nav__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav__user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.nav__avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--panel-hover);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text);
+}
+
+.nav__checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav__toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.nav__mobile-links {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 8px 16px 16px;
+  flex-direction: column;
+  gap: 2px;
+  border-top: 1px solid var(--border-soft);
+  background: var(--bg-elevated);
+}
+
+.nav__mobile-links .nav__link {
+  display: block;
+  padding: 10px 12px;
+}
+
+/* When the hidden checkbox is checked, reveal the mobile menu */
+.nav__checkbox:checked ~ .nav__mobile-links {
+  display: flex;
+}
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+.page-header {
+  padding: 40px 0 28px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 28px;
+}
+
+.page-header__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.btn:active { transform: translateY(1px); }
+
+.btn--primary {
+  background: var(--accent);
+  color: #ffffff;
+}
+.btn--primary:hover { background: #6f97ff; }
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text);
+}
+.btn--ghost:hover { background: var(--panel-hover); border-color: var(--accent-dim); }
+
+.btn--danger {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--absent);
+}
+.btn--danger:hover { background: var(--absent-soft); border-color: var(--absent); }
+
+.btn--sm { padding: 6px 12px; font-size: 13px; }
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+}
+
+.card--flush { padding: 0; overflow: hidden; }
+
+/* Stat card grid for dashboard */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--accent-dim);
+}
+.stat-card.is-present::before { background: var(--present); }
+.stat-card.is-absent::before  { background: var(--absent); }
+.stat-card.is-warning::before { background: var(--late); }
+
+.stat-card__label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.stat-card__value {
+  font-family: var(--font-mono);
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1;
+}
+
+.stat-card__value span {
+  font-size: 15px;
+  color: var(--text-faint);
+  font-weight: 400;
+}
+
+/* ============================================================
+   SIGNATURE ELEMENT — attendance strip
+   A row of small squares representing individual sessions.
+   Usage: <div class="strip"><span class="strip__cell is-present"></span>...</div>
+   ============================================================ */
+.strip {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.strip__cell {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--border);
+}
+.strip__cell.is-present { background: var(--present); }
+.strip__cell.is-absent  { background: var(--absent); }
+.strip__cell.is-late    { background: var(--late); }
+.strip__cell.is-empty   { background: var(--border-soft); }
+
+/* ============================================================
+   TABLE — the register
+   ============================================================ */
+.table-wrap {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table.register {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.register thead th {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  font-weight: 500;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.register tbody td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.register tbody tr:last-child td { border-bottom: none; }
+.register tbody tr:hover { background: var(--panel-hover); }
+
+.register .roll {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* ============================================================
+   BADGES
+   ============================================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+.badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.badge--present { background: var(--present-soft); color: var(--present); }
+.badge--absent  { background: var(--absent-soft); color: var(--absent); }
+.badge--late    { background: var(--late-soft); color: var(--late); }
+
+/* ============================================================
+   ATTENDANCE MARK TOGGLES (present/absent/late buttons)
+   ============================================================ */
+.mark-group {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.mark-btn {
+  border: none;
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 12px;
+  cursor: pointer;
+  border-right: 1px solid var(--border);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.mark-btn:last-child { border-right: none; }
+.mark-btn:hover { background: var(--panel-hover); color: var(--text); }
+
+.mark-btn.is-active-present { background: var(--present-soft); color: var(--present); }
+.mark-btn.is-active-absent  { background: var(--absent-soft); color: var(--absent); }
+.mark-btn.is-active-late    { background: var(--late-soft); color: var(--late); }
+
+/* ============================================================
+   PROGRESS BAR (segmented, ledger style)
+   ============================================================ */
+.progress {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border-soft);
+  overflow: hidden;
+}
+.progress__fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+}
+.progress__fill.is-low  { background: var(--absent); }
+.progress__fill.is-mid  { background: var(--late); }
+.progress__fill.is-high { background: var(--present); }
+
+/* ============================================================
+   STUDENT PROFILE (record page)
+   ============================================================ */
+.profile-card {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 24px;
+  margin-bottom: 28px;
+}
+
+.profile-card img {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  flex-shrink: 0;
+}
+
+.profile-card__body { flex: 1; min-width: 0; }
+
+.profile-card__name {
+  font-size: 22px;
+  margin-bottom: 2px;
+}
+
+.profile-card__regd {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: 18px;
+}
+
+.profile-meta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 24px;
+}
+
+.profile-meta__row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profile-meta__label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+.profile-meta__value {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.profile-card__attendance {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 16px 22px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.profile-card__attendance-value {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--present);
+  line-height: 1;
+}
+.profile-card__attendance-value.is-low { color: var(--absent); }
+.profile-card__attendance-value.is-mid { color: var(--late); }
+
+.profile-card__attendance-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   HOME / HERO — v2, bolder editorial layout
+   ============================================================ */
+.hero {
+  padding: 64px 0 0;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 20px;
+}
+
+.hero__eyebrow::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--present);
+  box-shadow: 0 0 0 3px var(--present-soft);
+}
+
+.hero__title {
+  font-size: clamp(38px, 5.5vw, 64px);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  margin: 0 0 20px;
+}
+
+.hero__title .is-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--text-faint);
+}
+
+.hero__title span.is-accent { color: var(--accent); }
+
+.hero__subtitle {
+  font-size: 17px;
+  max-width: 440px;
+  margin: 0 0 32px;
+}
+
+.hero__cta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Decorative wall of squares — pure texture, no data */
+.hero__wall {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 4px;
+  padding: 20px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.hero__wall span {
+  aspect-ratio: 1 / 1;
+  border-radius: 2px;
+  background: var(--border-soft);
+}
+
+/* Scattered accent cells for visual rhythm, purely decorative */
+.hero__wall span:nth-child(4n+1)  { background: var(--present-soft); }
+.hero__wall span:nth-child(11n+2) { background: var(--present); }
+.hero__wall span:nth-child(7n+3)  { background: var(--late-soft); }
+.hero__wall span:nth-child(13n+5) { background: var(--late); }
+.hero__wall span:nth-child(17n+6) { background: var(--absent-soft); }
+.hero__wall span:nth-child(23n+8) { background: var(--accent-soft); }
+.hero__wall span:nth-child(29n+3) { background: var(--accent); }
+
+/* Marquee ticker — CSS-only infinite scroll */
+.ticker {
+  margin: 64px 0;
+  border-top: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 16px 0;
+}
+
+.ticker__track {
+  display: inline-flex;
+  gap: 40px;
+  animation: ticker-scroll 26s linear infinite;
+}
+
+.ticker__track span {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+}
+
+.ticker__track span.is-lit { color: var(--accent); }
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Feature grid */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 60px;
+}
+
+.feature-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.feature-card__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.feature-card h3 { margin-bottom: 6px; }
+.feature-card p { font-size: 14px; margin-bottom: 0; }
+
+/* Bottom CTA band */
+.cta-band {
+  text-align: center;
+  padding: 56px 24px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-band h2 { margin-bottom: 8px; }
+.cta-band p { margin-bottom: 24px; }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; padding-top: 40px; }
+  .hero__wall { max-width: 320px; margin: 0 auto; }
+  .feature-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker__track { animation: none; }
+}
+
+/* ============================================================
+   STUDENT GRID + CARD
+   ============================================================ */
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
 
 .student-card {
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 400px;
-    text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 14px;
+  text-align: center;
+  transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
 }
 
-/* Hover effect */
 .student-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  border-color: var(--accent-dim);
+  background: var(--panel-hover);
+  transform: translateY(-2px);
 }
 
-/* Student Image */
 .student-card img {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 3px solid #4CAF50;
-    margin-bottom: 15px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  margin-bottom: 12px;
+  background: var(--bg-elevated);
 }
 
-/* Student Info */
-.student-card h1 {
-    font-size: 18px;
-    margin: 6px 0;
-    color: #333;
+.student-card h1,
+.student-card h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  font-family: var(--font-body);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Form Styling */
-form {
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    max-width: 400px;
-    margin: 30px auto;
+.student-card__roll {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+  margin-top: 4px;
 }
 
-form input[type="submit"] {
-    background: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.2s ease;
+a.student-card-link {
+  display: block;
+  text-decoration: none;
 }
 
-form input[type="submit"]:hover {
-    background: #45a049;
+/* ============================================================
+   FORM CARD (add/edit forms)
+   ============================================================ */
+.form-card {
+  max-width: 480px;
+}
+
+.form-card h2 {
+  margin-bottom: 4px;
+}
+
+.form-card__hint {
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+/* Style Django's {{ form.as_p }} output without touching views.py */
+.form-card form p {
+  margin: 0 0 18px 0;
+}
+
+.form-card form label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.form-card form input[type="text"],
+.form-card form input[type="email"],
+.form-card form input[type="number"],
+.form-card form input[type="file"],
+.form-card form select,
+.form-card form textarea {
+  width: 100%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+
+.form-card form input:focus,
+.form-card form select:focus,
+.form-card form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form-card form input[type="submit"] {
+  width: auto;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+.form-card form input[type="submit"]:hover { background: #6f97ff; }
+
+.form-card form ul.errorlist {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0 0;
+  color: var(--absent);
+  font-size: 12px;
+}
+
+/* ============================================================
+   ALERTS (django messages framework)
+   ============================================================ */
+.alert {
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-bottom: 18px;
+  border: 1px solid transparent;
+}
+
+.alert--error {
+  background: var(--absent-soft);
+  border-color: rgba(248, 113, 113, 0.3);
+  color: var(--absent);
+}
+
+.alert--success {
+  background: var(--present-soft);
+  border-color: rgba(52, 211, 153, 0.3);
+  color: var(--present);
+}
+
+.alert--warning {
+  background: var(--late-soft);
+  border-color: rgba(251, 191, 36, 0.3);
+  color: var(--late);
+}
+
+.alert--info {
+  background: var(--accent-soft);
+  border-color: rgba(76, 126, 255, 0.3);
+  color: var(--accent);
+}
+
+/* ============================================================
+   FORMS
+   ============================================================ */
+.field { margin-bottom: 18px; }
+
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  transition: border-color 0.15s ease;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.field input::placeholder { color: var(--text-faint); }
+
+.auth-card {
+  max-width: 380px;
+  margin: 80px auto;
+  padding: 32px;
+}
+
+.auth-card .brand-mark {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, var(--accent), var(--accent-dim));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: white;
+  margin-bottom: 20px;
+}
+
+/* ============================================================
+   EMPTY STATES
+   ============================================================ */
+.empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-muted);
+}
+.empty h3 { color: var(--text); margin-bottom: 6px; }
+.empty p { max-width: 320px; margin: 0 auto; }
+
+/* ============================================================
+   UTILITY
+   ============================================================ */
+.text-muted { color: var(--text-muted); }
+.text-mono  { font-family: var(--font-mono); }
+.mt-0 { margin-top: 0; }
+.flex { display: flex; align-items: center; gap: 12px; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 860px) {
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .nav__links { display: none; }
+  .nav__toggle { display: flex; }
+}
+
+@media (max-width: 560px) {
+  .stat-grid { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .page-header { padding: 28px 0 20px; }
+  h1 { font-size: 22px; }
+
+  .profile-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .profile-card__attendance {
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+  }
+  .profile-card__attendance-value { font-size: 22px; }
+  .profile-meta { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
 }
