@@ -1,0 +1,65 @@
+{% extends 'panel/layout_panel.html' %}
+
+{% block panel_title %}Dashboard{% endblock %}
+
+{% block panel_content %}
+<div class="page-header">
+  <div>
+    <span class="page-header__eyebrow">Admin Panel</span>
+    <h1>Dashboard</h1>
+  </div>
+  <a href="{% url 'panel_attendance' %}" class="btn btn--primary btn--sm">Mark attendance</a>
+</div>
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-card__label">Students</div>
+    <div class="stat-card__value">{{ student_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">Branches</div>
+    <div class="stat-card__value">{{ branch_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">Subjects</div>
+    <div class="stat-card__value">{{ subject_count }}</div>
+  </div>
+  <div class="stat-card is-present">
+    <div class="stat-card__label">Sessions today</div>
+    <div class="stat-card__value">{{ sessions_today }}</div>
+  </div>
+</div>
+
+<h2>Recent sessions</h2>
+<div class="table-wrap">
+  <table class="register">
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Branch</th>
+        <th>Date</th>
+        <th>Marked by</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for session in recent_sessions %}
+      <tr>
+        <td class="text-mono">{{ session.subject.code }}</td>
+        <td>{{ session.branch.code }}</td>
+        <td>{{ session.date }}</td>
+        <td>{{ session.marked_by.username|default:"—" }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4">
+          <div class="empty">
+            <h3>No sessions yet</h3>
+            <p>Mark your first attendance from the panel.</p>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

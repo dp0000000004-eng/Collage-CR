@@ -1,0 +1,102 @@
+{% extends 'panel/layout_panel.html' %}
+
+{% block panel_title %}Mark Attendance{% endblock %}
+
+{% block panel_content %}
+<div class="page-header">
+  <div>
+    <span class="page-header__eyebrow">Admin Panel</span>
+    <h1>Mark attendance</h1>
+  </div>
+</div>
+
+<div class="card panel-filter">
+  <form method="GET" class="panel-filter__form">
+    <div class="panel-filter__grid">
+      <div class="field">
+        <label for="branch">Branch</label>
+        <select name="branch" id="branch" required onchange="this.form.submit()">
+          <option value="">Select branch</option>
+          {% for b in branches %}
+          <option value="{{ b.id }}" {% if branch_id == b.id|stringformat:"s" %}selected{% endif %}>{{ b.name }} ({{ b.code }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="field">
+        <label for="subject">Subject</label>
+        <select name="subject" id="subject" required onchange="this.form.submit()">
+          <option value="">Select subject</option>
+          {% for s in subjects %}
+          <option value="{{ s.id }}" {% if subject_id == s.id|stringformat:"s" %}selected{% endif %}>{{ s.code }} — {{ s.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="field">
+        <label for="date">Date</label>
+        <input type="date" name="date" id="date" value="{{ session_date|date:'Y-m-d' }}" onchange="this.form.submit()">
+      </div>
+    </div>
+  </form>
+</div>
+
+{% if students_with_status %}
+<form method="POST" class="att-form">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="save_attendance">
+  <input type="hidden" name="branch" value="{{ branch_id }}">
+  <input type="hidden" name="subject" value="{{ subject_id }}">
+  <input type="hidden" name="date" value="{{ session_date|date:'Y-m-d' }}">
+
+  <div class="att-form__head">
+    <div>
+      <h2>{{ subject.code }} — {{ branch.code }}</h2>
+      <p class="text-muted mt-0">{{ session_date|date:"l, M j, Y" }} · {{ students_with_status|length }} students</p>
+    </div>
+    <button type="submit" class="btn btn--primary">Save attendance</button>
+  </div>
+
+  <div class="att-list">
+    {% for item in students_with_status %}
+    <div class="att-row">
+      <div class="att-row__info">
+        {% if item.student.image %}
+        <img src="{{ item.student.image.url }}" alt="" class="att-row__avatar">
+        {% else %}
+        <span class="att-row__avatar att-row__avatar--placeholder">{{ item.student.name|slice:":1"|upper }}</span>
+        {% endif %}
+        <div>
+          <div class="att-row__name">{{ item.student.name }}</div>
+          <div class="att-row__regd text-mono">{{ item.student.regd_no }}</div>
+        </div>
+      </div>
+      <div class="att-toggle" role="group" aria-label="Attendance for {{ item.student.name }}">
+        <label class="att-toggle__opt att-toggle__opt--present">
+          <input type="radio" name="student_{{ item.student.id }}" value="P" {% if item.is_present %}checked{% endif %}>
+          <span>Present</span>
+        </label>
+        <label class="att-toggle__opt att-toggle__opt--absent">
+          <input type="radio" name="student_{{ item.student.id }}" value="A" {% if not item.is_present %}checked{% endif %}>
+          <span>Absent</span>
+        </label>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="att-form__foot">
+    <button type="submit" class="btn btn--primary">Save attendance</button>
+  </div>
+</form>
+{% elif branch_id and subject_id %}
+<div class="empty card">
+  <h3>No students in this branch</h3>
+  <p>Add students first from the Students panel.</p>
+  <a href="{% url 'panel_students' %}" class="btn btn--primary btn--sm">Add students</a>
+</div>
+{% else %}
+<div class="empty card">
+  <h3>Select branch &amp; subject</h3>
+  <p>Choose a branch and subject above to start marking attendance.</p>
+</div>
+{% endif %}
+{% endblock %}

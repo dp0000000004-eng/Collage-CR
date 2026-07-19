@@ -1,0 +1,74 @@
+{% extends 'panel/layout_panel.html' %}
+
+{% block panel_title %}Branches{% endblock %}
+
+{% block panel_content %}
+<div class="page-header">
+  <div>
+    <span class="page-header__eyebrow">Admin Panel</span>
+    <h1>Branches</h1>
+  </div>
+</div>
+
+<div class="panel-split">
+  <div class="panel-split__main">
+    <div class="table-wrap">
+      <table class="register">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Semester</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for branch in branches %}
+          <tr>
+            <td>{{ branch.name }}</td>
+            <td class="text-mono">{{ branch.code }}</td>
+            <td>{{ branch.semester }}</td>
+            <td>
+              <form method="POST" action="{% url 'panel_branch_delete' branch.id %}" class="inline-form"
+                onsubmit="return confirm('Delete branch {{ branch.code }}? All related data will be removed.');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn--danger btn--sm">Delete</button>
+              </form>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4">
+              <div class="empty"><h3>No branches yet</h3></div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel-split__side">
+    <div class="card form-card">
+      <h2>Add branch</h2>
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="add_branch">
+        <div class="field">
+          <label for="id_name">Name</label>
+          {{ form.name }}
+        </div>
+        <div class="field">
+          <label for="id_code">Code</label>
+          {{ form.code }}
+        </div>
+        <div class="field">
+          <label for="id_semester">Semester</label>
+          {{ form.semester }}
+        </div>
+        <button type="submit" class="btn btn--primary">Add branch</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

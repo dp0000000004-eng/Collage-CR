@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+
+{% block title %}{% block panel_title %}Admin Panel{% endblock %} — Student Tracker{% endblock %}
+
+{% block nav %}
+  {% include 'nav.html' with active='panel' %}
+{% endblock %}
+
+{% block body %}
+<div class="panel-shell">
+  <input type="checkbox" id="panel-nav-toggle" class="panel-nav__checkbox">
+
+  <aside class="panel-sidebar">
+    <div class="panel-sidebar__head">
+      <span class="panel-sidebar__mark">AP</span>
+      <div>
+        <div class="panel-sidebar__title">Admin Panel</div>
+        <div class="panel-sidebar__sub">Manage &amp; mark attendance</div>
+      </div>
+    </div>
+
+    <nav class="panel-nav">
+      <a href="{% url 'panel_dashboard' %}" class="panel-nav__link {% if panel_active == 'dashboard' %}is-active{% endif %}">
+        <span class="panel-nav__icon">◫</span> Dashboard
+      </a>
+      <a href="{% url 'panel_attendance' %}" class="panel-nav__link {% if panel_active == 'attendance' %}is-active{% endif %}">
+        <span class="panel-nav__icon">✓</span> Mark attendance
+      </a>
+      <a href="{% url 'panel_students' %}" class="panel-nav__link {% if panel_active == 'students' %}is-active{% endif %}">
+        <span class="panel-nav__icon">👤</span> Students
+      </a>
+      <a href="{% url 'panel_subjects' %}" class="panel-nav__link {% if panel_active == 'subjects' %}is-active{% endif %}">
+        <span class="panel-nav__icon">📚</span> Subjects
+      </a>
+      <a href="{% url 'panel_branches' %}" class="panel-nav__link {% if panel_active == 'branches' %}is-active{% endif %}">
+        <span class="panel-nav__icon">🏛</span> Branches
+      </a>
+      <a href="{% url 'panel_sessions' %}" class="panel-nav__link {% if panel_active == 'sessions' %}is-active{% endif %}">
+        <span class="panel-nav__icon">📋</span> Sessions
+      </a>
+    </nav>
+
+    <a href="{% url 'home' %}" class="panel-sidebar__exit btn btn--ghost btn--sm">← Back to site</a>
+  </aside>
+
+  <main class="panel-main">
+    <div class="panel-main__top">
+      <label for="panel-nav-toggle" class="panel-nav__toggle btn btn--ghost btn--sm" aria-label="Panel menu">☰ Menu</label>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert {% if message.tags == 'success' %}alert--success{% elif message.tags == 'error' %}alert--error{% else %}alert--info{% endif %}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    {% block panel_content %}{% endblock %}
+  </main>
+</div>
+{% endblock %}

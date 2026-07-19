@@ -8,7 +8,7 @@ active values: home | student
   <div class="nav__inner">
     <div class="nav__brand">
       <span class="nav__brand-mark">ST</span>
-      Student Manage
+      <span class="nav__brand-text">Student Manage</span>
     </div>
 
     <ul class="nav__links">
@@ -18,10 +18,10 @@ active values: home | student
 
     <div class="nav__right">
       {% if user.is_authenticated %}
-        <div class="nav__user">
+        <a href="{% url 'profile' %}" class="nav__user nav__user--link {% if active == 'profile' %}is-active{% endif %}" title="Account settings">
           <span class="nav__avatar">{{ user.username|slice:":1"|upper }}</span>
-          <span>{{ user.username }}</span>
-        </div>
+          <span class="nav__username">{{ user.username }}</span>
+        </a>
         <a href="{% url 'logout' %}" class="btn btn--ghost btn--sm">Log out</a>
       {% else %}
         <a href="{% url 'login' %}" class="btn btn--primary btn--sm">Log in</a>
@@ -33,5 +33,8 @@ active values: home | student
   <ul class="nav__mobile-links">
     <li><a class="nav__link {% if active == 'home' %}is-active{% endif %}" href="{% url 'home' %}">Home</a></li>
     <li><a class="nav__link {% if active == 'student' %}is-active{% endif %}" href="{% url 'students' %}">Students</a></li>
+    {% if user.is_authenticated %}
+    <li><a class="nav__link {% if active == 'profile' %}is-active{% endif %}" href="{% url 'profile' %}">Profile</a></li>
+    {% endif %}
   </ul>
 </nav>
