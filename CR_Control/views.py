@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Students, Profile
 from .forms import StudentForm, UsernameChangeForm, StyledPasswordChangeForm
 from datetime import date
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 
@@ -48,13 +49,16 @@ def record_view(request, student_id):
 
 def create_user(request):
     if request.method == "POST":
-        username = request.POST.get("username")
-        email = request.POST.get("email")
-        raw_password = request.POST.get("password")
-        user = User(username=username, email=email)
-        user.set_password(raw_password)
-        user.save()
-        return redirect("students")
+        try:
+            username = request.POST.get("username")
+            email = request.POST.get("email")
+            raw_password = request.POST.get("password")
+            user = User(username=username, email=email)
+            user.set_password(raw_password)
+            user.save()
+            return redirect("students")
+        except IntegrityError:
+            messages.info(request, message="IN The Same Credentials Account Already exist! ")
     else:
         messages.error(request, message="Something went wrong :(")
     
@@ -115,10 +119,16 @@ def profile_view(request):
     })
 
 
-# @login_required
-# def delete(request, prof_id):
-#     user = Profile.objects.get(id=prof_id)
-#     user.delete()
-#     messages.success("Yor Profile deleted Successfuly")
+@login_required
+def delete(request, prof_id):
+    user = get_object_or_404(User, id=prof_id)
+    user.delete()
 
-#     return render(request, "profile.html")
+    return redirect("home")
+
+@login_required
+def delete_student(request, student_id):
+    student = get_object_or_404(Students, id=student_id)
+    student.delete()
+
+    return redirect("home")

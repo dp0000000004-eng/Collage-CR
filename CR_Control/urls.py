@@ -10,7 +10,8 @@ urlpatterns = [
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
     path("profile/", views.profile_view, name="profile"),
-    # path("delete/<int:prof_id>/", views.delete, name="delete"),
+    path("profile/delete/<int:prof_id>/", views.delete, name="delete"),
+    path("delete_student/<int:student_id>", views.delete_student, name="delete_student"),
 
     path("panel/", admin_views.panel_dashboard, name="panel_dashboard"),
     path("panel/attendance/", admin_views.panel_mark_attendance, name="panel_attendance"),

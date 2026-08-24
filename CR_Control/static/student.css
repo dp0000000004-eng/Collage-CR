@@ -7,7 +7,7 @@
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=NTR&display=swap');
 :root {
   /* --- Color tokens --- */
   --bg:            #0A0F1C;
@@ -33,9 +33,9 @@
   --late-soft:     rgba(251, 191, 36, 0.14);
 
   /* --- Type --- */
-  --font-display: 'Space Grotesk', system-ui, sans-serif;
-  --font-body:    'Inter', system-ui, sans-serif;
-  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+  --font-display: "NTR", sans-serif;
+  --font-body:    "NTR", sans-serif;
+  --font-mono:    "NTR", sans-serif;
 
   /* --- Layout --- */
   --radius-sm: 6px;
@@ -1475,6 +1475,31 @@ a.student-card-link {
   .empty {
     padding: 32px 16px;
   }
+}
+
+.deleteDiv {
+  text-align:center;
+  padding:8px;
+}
+
+.deleteAcc {
+  font-family:"NTR", sans-serif;
+  border-radius:4px;
+  font-size:18px;
+  color:red;
+  size:20px;
+  border:none;
+  padding:0px;
+  cursor: pointer;
+
+  background-color:#0A0F1C;
+  transition: ease 0.7s ;
+}
+
+.deleteAcc:hover {
+
+  background-color: #4C7EFF;
+  box-shadow: #34D399;
 }
 
 /* Very small phones */

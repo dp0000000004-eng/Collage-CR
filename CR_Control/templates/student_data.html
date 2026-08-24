@@ -14,6 +14,7 @@
       <h1>{{ student_data.name }}</h1>
     </div>
     <a href="{% url 'students' %}" class="btn btn--ghost btn--sm">Back to roster</a>
+    <a href="{% url 'delete_student' student_data.id %}" class="btn btn--ghost btn--sm">Delete Student</a>
   </div>
 
   <div class="card profile-card">
