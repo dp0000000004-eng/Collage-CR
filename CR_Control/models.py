@@ -14,10 +14,27 @@ class Branch(models.Model):
         return f"{self.name} {self.code}"
 
 class Profile(models.Model):
+
     CR = 'CR'
+
     PROF = 'PROF'
+
     STUDENT = 'STUDENT'
-    ROLE_CHOICES = [(CR, 'Class Representative'), (PROF, 'Professor'), (STUDENT, 'Student')]
+
+    ROLE_CHOICES = [
+        (
+            CR, 
+            'Class Representative'
+        ), 
+        (
+            PROF, 
+            'Professor'
+        ), 
+        (
+            STUDENT, 
+            'Student'
+        )
+    ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
@@ -120,7 +137,12 @@ class Attendance(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=ABSENT)
 
     class Meta:
-        unique_together = ('session', 'student')
+        unique_together = (
+
+            'session', 'student'
+
+        )
+
 
     def __str__(self):
         return f"{self.student.regd_no} — {self.session.subject.code} — {self.session.date} — {self.get_status_display()}"

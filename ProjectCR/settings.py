@@ -74,19 +74,20 @@ WSGI_APPLICATION = 'ProjectCR.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-"""
-import dj_database_url
 
-DATABASES = {
-    'default': dj_database_url.parse('postgresql://collagedata_user:W1tb0F8AwSHqOplTEBhesSCptAqNlBR4@dpg-d99hik0k1i2s73e64h5g-a.singapore-postgres.render.com/collagedata')
-}
+
+# import dj_database_url
+
+# DATABASES = {
+#     'default': dj_database_url.parse('postgresql://collagedata_user:W1tb0F8AwSHqOplTEBhesSCptAqNlBR4@dpg-d99hik0k1i2s73e64h5g-a.singapore-postgres.render.com/collagedata')
+# }
 
 
 

@@ -38,7 +38,8 @@
           <span class="account-hero__chip-value">{{ user.date_joined|date:"M Y" }}</span>
           
         </div>
-        <!-- <a href="% url 'delete' %">Delete</a> -->
+          
+
         {% if profile %}
         <div class="account-hero__chip">
           <span class="account-hero__chip-label">Role</span>
@@ -141,9 +142,16 @@
 
         <button type="submit" class="btn btn--primary">Update password</button>
       </form>
+      
     </div>
 
   </div>
 
+</div>
+<div class="deleteDiv">
+  <form action="{% url 'delete' request.user.id %}" method="post">
+      {% csrf_token %}
+      <button class="deleteAcc" type="submit">Delete Account</button>
+  </form>
 </div>
 {% endblock %}
